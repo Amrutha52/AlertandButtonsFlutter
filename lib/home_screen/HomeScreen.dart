@@ -11,6 +11,7 @@ class HomeScreen extends StatefulWidget
 
 class _HomeScreenState extends State<HomeScreen>
 {
+  bool light = true;
   @override
   Widget build(BuildContext context)
   {
@@ -28,6 +29,14 @@ class _HomeScreenState extends State<HomeScreen>
     }
 
     return Scaffold(
+      appBar: AppBar(),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            Text("data")
+          ],
+        ),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -101,6 +110,7 @@ class _HomeScreenState extends State<HomeScreen>
           ),
           DropdownButton(
             value: dropValue,
+              hint: Text("Select"),
               items: List.generate(gender.length,
                   (index) => DropdownMenuItem(
                     value: gender[index],
@@ -112,7 +122,93 @@ class _HomeScreenState extends State<HomeScreen>
                 dropValue = value!;
                 setState(() {});
               }
-          )
+          ),
+
+          ExpansionTile(
+              title: Text("Expansion Tile"),
+            children: [
+              Text("data"),
+              Container(
+                height: 50,
+                color: Colors.red,
+              )
+            ],
+          ),
+          Switch(
+            // This bool value toggles the switch.
+              value: light,
+              overlayColor: WidgetStatePropertyAll(Colors.red),
+              thumbColor: WidgetStatePropertyAll(Colors.yellow),
+              onChanged: (bool value){
+                // This is called when the user toggles the switch.
+                setState(() {
+                  light = value;
+                });
+              }
+          ),
+          //Alert Dialogue
+          TextButton(
+              onPressed: (){
+            showDialog(
+                context: context,
+                builder: (context) => StatefulBuilder(builder: (context, alertState) =>
+                    AlertDialog(
+                      title: Text("Heloo"),
+                      content: Container(
+                        height: 200,
+                        color: Colors.white,
+                        child: Center(
+                          child: Switch(
+                            // This bool value toggles the switch.
+                              value: light,
+                              overlayColor: WidgetStatePropertyAll(Colors.red),
+                              thumbColor: WidgetStatePropertyAll(Colors.yellow),
+                              onChanged: (value){
+                                // This is called when the user toggles the switch.
+                                setState(() {
+                                  light = value;
+                                  alertState(() {
+                                    //alertState click cheyumbol aane alert state update aavane..
+                                  });
+                                });
+                              }
+                          ),
+                        ),
+                      ),
+                      actions: [
+                        TextButton(onPressed: (){
+                          Navigator.pop(context);
+                        },
+                            child: Text("Close")),
+                        TextButton(onPressed: (){
+
+                        },
+                            child: Text("Save"))
+                      ],
+                    )
+                )
+            );
+          },
+              child: Text("Alert")
+          ),
+          TextButton(onPressed: (){
+            showModalBottomSheet(
+                isScrollControlled: true, // height koottaan or kurakkan
+                context: context,
+                builder: (context) => Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      //height: 700,
+                      width: double.infinity,
+                      child: Center(
+                          child: Text("data",
+                            style: TextStyle(color: Colors.black),)),
+                    ),
+                  ],
+                ));
+          },
+              child: Text("Bottom Sheet")),
         ],
       ),
     );
